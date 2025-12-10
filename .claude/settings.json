@@ -11,8 +11,8 @@
       "Bash(ls:*)",
       "WebSearch",
       "WebFetch",
-      "Skill(dotnet-maui)",
-      "Skill(microsoft-agent-framework)",
+      "Skill(electron-skill)",
+      "Skill(vercel-ai-sdk)",
       "Skill(prompt-engineering)",
       "mcp__mslearn",
       "mcp__context7"

@@ -1,5 +1,5 @@
 {
-	"name": "Debian",
+	"name": "Electron Dev",
 	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {
@@ -20,9 +20,6 @@
 			"installDockerComposeSwitch": true,
 			"version": "latest",
 			"dockerDashComposeVersion": "v2"
-		},
-		"ghcr.io/devcontainers/features/dotnet:2": {
-			"version": "10.0"
 		}
 	},
   "customizations": {

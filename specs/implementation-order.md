@@ -7,7 +7,7 @@ Recommended development order for Solo RPG Companion App MVP, organized by phase
 ## Phase A: Core Loop & Foundation (Weeks 1-3)
 
 ### Week 1: Project Setup & Basic UI
-- [ ] Project Setup (solution structure, DI, build config)
+- [ ] Project Setup (Electron + React scaffolding, TypeScript config, build tooling)
 - [ ] [FB-003] Chat Interface UI
 - [ ] [Spike 4] Combat Validation Walkthrough (parallel)
 

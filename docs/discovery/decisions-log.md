@@ -73,29 +73,41 @@ Track key decisions made during discovery.
 
 ## Decision 004: Technology Stack
 
-**Date:** 2025-12-09
+**Date:** 2025-12-09 (Updated: 2025-12-10)
 **Phase:** 3 - Ideation
-**Decision:** .NET MAUI + C# with Microsoft Agent Framework
+**Decision:** Electron + TypeScript with Vercel AI SDK
 
 **Options considered:**
 1. Tauri + Python sidecar - Complex IPC, packaging issues
 2. Electron + Python - Large bundle, two languages
 3. Pure Python (PyQt/PySide) - PO unfamiliar
-4. .NET MAUI + C# ✅ Selected
+4. .NET MAUI + C# - No Linux support ❌
+5. Electron + TypeScript + Vercel AI SDK ✅ Selected
 
 **Rationale:**
-- PO has strong C# expertise - accelerates development
-- .NET MAUI provides true cross-platform (Windows, Mac, iOS, Android)
-- Microsoft Agent Framework has native C# support
-- Azure OpenAI SDK / Semantic Kernel provide LLM tooling in C#
-- Single language codebase
-- Native feel on each platform
+- **Linux support required** - .NET MAUI does not support Linux desktop
+- PO has HTML/CSS/JS familiarity - web technologies transfer directly
+- Electron provides true cross-platform (Windows, Mac, **Linux**)
+- Vercel AI SDK provides clean TypeScript AI tooling with:
+  - Native tool use / function calling
+  - Multi-provider support (Claude, OpenAI, etc.)
+  - Model Context Protocol (MCP) support
+  - Streaming responses
+- Huge npm ecosystem for any additional needs
+- Single language codebase (TypeScript)
+- Hot reload, fast iteration during development
+
+**Trade-offs:**
+- Larger app bundle (~150MB vs ~50MB for native)
+- Higher memory usage than native apps
+- Chromium-based (not truly native UI)
 
 **Implications:**
-- Use C# SDKs for LLM integration (Azure OpenAI, Semantic Kernel)
-- SQLite via Entity Framework or similar
-- May need to evaluate C# vector DB options (or call Python service for ChromaDB if needed)
-- Microsoft ecosystem alignment
+- Use Vercel AI SDK for LLM integration and agent patterns
+- SQLite via better-sqlite3 or similar
+- Vector store options: Qdrant, LanceDB, or in-memory for MVP
+- Can use any frontend framework (React, Vue, Svelte, or vanilla)
+- Web ecosystem alignment
 
 ---
 
@@ -287,15 +299,15 @@ App Data (SQLite + vector store - internal)
 
 ---
 
-## Decision 011: Rules as AI Agent Knowledge (not C# code)
+## Decision 011: Rules as AI Agent Knowledge (not compiled code)
 
 **Date:** 2025-12-10
 **Phase:** 5 - Requirements
-**Decision:** Rules encoded as AI agent knowledge with markdown/JSON representations, not compiled C# code
+**Decision:** Rules encoded as AI agent knowledge with markdown/JSON representations, not compiled code
 
 **Approach:**
 - Rules system defined in markdown (human-readable rules text)
-- Character/NPC state stored as JSON or markdown (not C# objects)
+- Character/NPC state stored as JSON or markdown (not TypeScript objects)
 - AI agent "knows" the rules via system prompt + RAG
 - Dice mechanics are simple utility functions, not encoded game logic
 - AI interprets and applies rules conversationally
@@ -351,7 +363,7 @@ Roll 4dF + approach rating vs difficulty.
 
 **Implications:**
 - Rules systems are "knowledge packs" (markdown + JSON schema)
-- C# code limited to: dice rolling, file I/O, UI, LLM orchestration
+- TypeScript code limited to: dice rolling, file I/O, UI, LLM orchestration
 - AI agent is responsible for rules interpretation
 - Character sheets are JSON/markdown, not database entities
 

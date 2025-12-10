@@ -416,7 +416,7 @@ MVP is considered successful when:
 **Rationale**: MVP uses Fate Accelerated only to validate architecture. Additional systems (Tales of the Valiant, etc.) post-MVP. However, architecture is designed to be modular from day one to avoid refactoring when adding new systems (Decision 014).
 
 #### US-023: Mobile Native Optimization
-**Rationale**: Desktop-first for MVP. .NET MAUI supports mobile, but optimize after desktop validation.
+**Rationale**: Desktop-first for MVP. Electron supports mobile via Capacitor/Cordova, but optimize after desktop validation.
 
 #### US-024: Multiplayer/Shared Campaigns
 **Rationale**: Explicitly solo experience. Different product direction.
@@ -524,7 +524,7 @@ MVP is considered successful when:
 - **Details**:
   - LLM: OpenAI-compatible API (Claude, OpenAI, Azure OpenAI, Ollama)
   - User configures: API endpoint, API key, model name
-  - Agent framework: Microsoft Agent Framework (C# SDK)
+  - Agent framework: Vercel AI SDK (TypeScript)
   - Context includes: character sheet, scene state, recent history, rules system
   - AI has access to tools: roll_dice, check_rule, get_npc, update_state, invoke_oracle
 - **Acceptance Criteria**:
@@ -533,7 +533,7 @@ MVP is considered successful when:
   - AI correctly interprets user intent 90%+ of time
 - **Dependencies**: FR-030 (Rules System Integration), FR-040 (Oracle Integration), FR-020 (Data Persistence)
 - **Technical Notes**:
-  - Use Semantic Kernel for LLM abstraction and tool registration
+  - Use Vercel AI SDK for LLM abstraction and tool registration
   - Implement retry with exponential backoff for API failures
   - Log all LLM interactions for debugging (exclude API keys)
 
@@ -590,7 +590,7 @@ MVP is considered successful when:
   - Formatting enhances readability (validation testing)
   - No rendering errors for common markdown patterns
 - **Dependencies**: None
-- **Technical Notes**: Use Markdig (C# markdown library)
+- **Technical Notes**: Use react-markdown, marked, or similar JS library
 
 ---
 
@@ -697,10 +697,10 @@ MVP is considered successful when:
 - **Description**: Core Fate Accelerated rules encoded as AI agent knowledge with markdown/JSON representations (Decision 011)
 - **Priority**: MUST HAVE
 - **Details**:
-  - **Rules as Knowledge**: Fate Accelerated rules stored as markdown documents, not compiled C# code
+  - **Rules as Knowledge**: Fate Accelerated rules stored as markdown documents, not compiled code
   - **Character State**: Character sheet stored as JSON or markdown (not database entities)
   - **AI Interpretation**: AI agent "knows" the rules via system prompt + RAG retrieval
-  - **C# Code Limited To**: Dice rolling utilities, file I/O, UI components, LLM orchestration
+  - **TypeScript Code Limited To**: Dice rolling utilities, file I/O, UI components, LLM orchestration
   - **Approaches**: Careful, Clever, Flashy, Forceful, Quick, Sneaky (ratings -1 to +3)
   - **Actions**: Overcome, Create Advantage, Attack, Defend
   - **Roll Resolution**: 4dF (Fudge dice: -1, 0, +1) + Approach bonus vs Difficulty
@@ -725,7 +725,7 @@ MVP is considered successful when:
   - Easier to add new rules systems - just markdown + schema, no recompilation
   - Player can read/understand their character data
   - Trade-off: Less deterministic than compiled code, relies on AI consistency
-  - C# dice rolling validates math (4dF+3 = correct total)
+  - TypeScript dice rolling validates math (4dF+3 = correct total)
 
 ---
 
@@ -744,8 +744,8 @@ MVP is considered successful when:
   - AI can explain rules conversationally using retrieved context
 - **Dependencies**: FR-030 (Mechanics Implementation)
 - **Technical Notes**:
-  - Use Semantic Kernel for document chunking and embedding
-  - Store embeddings in vector store (Qdrant or Azure AI Search local)
+  - Use LangChain.js or custom chunking for document processing
+  - Store embeddings in vector store (LanceDB or Qdrant embedded)
 
 ---
 
@@ -1016,7 +1016,7 @@ MVP is considered successful when:
 - **Priority**: MUST HAVE
 - **Details**:
   - Embed session summaries (markdown files) and world wiki content (NPCs, locations, factions)
-  - Vector store: Semantic Kernel Memory with Qdrant (embedded or server) or Azure AI Search (local)
+  - Vector store: LanceDB or Qdrant (embedded)
   - Metadata: session number, NPCs involved, locations, tags, date
   - AI can query: "What happened with the merchant guild?" → retrieve relevant history
   - Used for: long campaign context management, player queries, AI recall
@@ -1028,7 +1028,7 @@ MVP is considered successful when:
   - Searches across session logs AND world wiki markdown files
 - **Dependencies**: FR-020 (Hybrid Storage), FR-021 (Session Summaries)
 - **Technical Notes** (Decision 010):
-  - Use Semantic Kernel memory connectors
+  - Use LangChain.js or Vercel AI SDK for embeddings
   - Embed markdown file contents at session end
   - Retrieval: top 3-5 chunks added to AI context
   - Vector store enables semantic search across file system content
@@ -1129,7 +1129,7 @@ MVP is considered successful when:
   - Performance: 60fps scrolling, no lag on typing
 - **Dependencies**: FR-010 (Conversation Engine), FR-013 (Markdown Rendering)
 - **Technical Notes**:
-  - Consider XAML for native feel or Blazor Hybrid for web-based UI in MAUI
+  - Use React, Vue, or Svelte for component-based UI in Electron renderer
 
 ---
 
@@ -1167,7 +1167,7 @@ MVP is considered successful when:
   - Changes take effect immediately or on next session start (as appropriate)
 - **Dependencies**: None
 - **Technical Notes**:
-  - Use .NET SecureString or OS keychain API for API key storage
+  - Use electron-store with encryption or keytar for OS keychain API key storage
   - Default API endpoint: OpenAI-compatible (user configurable)
 
 ---
@@ -1384,7 +1384,7 @@ MVP is considered successful when:
 - **Rationale**: Protect user credentials from theft or exposure
 - **Target**: API keys never visible in logs, files, or memory dumps
 - **Measurement**: Security audit, code review
-- **Implementation**: Use .NET SecureString or OS keychain APIs
+- **Implementation**: Use electron-store with encryption or keytar for OS keychain
 
 ---
 
@@ -1407,10 +1407,10 @@ MVP is considered successful when:
 ### 6.5 Portability
 
 #### NFR-040: Cross-Platform Compatibility (Desktop)
-- **Requirement**: Runs on Windows 10+, macOS 11+
-- **Rationale**: .NET MAUI supports both, wide user base
-- **Target**: Feature parity on both platforms
-- **Measurement**: Manual testing on both platforms
+- **Requirement**: Runs on Windows 10+, macOS 11+, Linux (Ubuntu 20.04+, Fedora 35+)
+- **Rationale**: Electron supports all major desktop platforms including Linux
+- **Target**: Feature parity on all three platforms
+- **Measurement**: Manual testing on Windows, macOS, and Linux
 - **Notes**: Desktop-first for MVP, mobile optimization post-MVP
 
 ---
@@ -1463,17 +1463,22 @@ MVP is considered successful when:
 
 | Layer | Technology | Rationale (from Technical Assessment) |
 |-------|------------|--------------------------------------|
-| **Desktop Framework** | .NET MAUI | Cross-platform (Win/Mac), native C#, PO has deep C# expertise |
-| **Agent Framework** | Microsoft Agent Framework (C# SDK) | Native C# support, modern tool use patterns |
-| **Backend Language** | C# (.NET 8+) | Single language, strong async/await, PO expertise, no IPC complexity |
-| **LLM Integration** | Semantic Kernel + Azure OpenAI SDK | Native C# LLM tooling, RAG capabilities, memory connectors |
-| **Structured Storage** | SQLite via Entity Framework Core | Embedded, reliable, type-safe ORM, portable |
-| **Vector Storage** | Semantic Kernel Memory + Qdrant or Azure AI Search (local) | Native C# integration, embedded mode option |
-| **RAG** | Semantic Kernel | Built-in document chunking, embeddings, retrieval |
-| **UI Framework** | XAML or Blazor Hybrid in MAUI | Native UI feel (XAML) or web-based hybrid (Blazor) |
-| **Markdown Rendering** | Markdig (C# library) | Renders AI responses in chat, portable format |
+| **Desktop Framework** | Electron | Cross-platform (Win/Mac/**Linux**), web technologies |
+| **Agent Framework** | Vercel AI SDK | TypeScript-native, tool use, MCP support, multi-provider |
+| **Backend Language** | TypeScript/Node.js | Single language, strong async/await, web ecosystem |
+| **LLM Integration** | Vercel AI SDK | Clean API, streaming, tool calling, provider abstraction |
+| **Structured Storage** | SQLite via better-sqlite3 | Embedded, reliable, fast, portable |
+| **Vector Storage** | LanceDB or Qdrant (embedded) | Local-first vector search, no external dependencies |
+| **RAG** | LangChain.js or custom with Vercel AI SDK | Document chunking, embeddings, retrieval |
+| **UI Framework** | React / Vue / Svelte (TBD) | Component-based, rich ecosystem, hot reload |
+| **Markdown Rendering** | react-markdown or marked | Renders AI responses in chat, portable format |
 
-**Key Decision**: Decision 004 - .NET MAUI + C# stack leverages PO's expertise and eliminates cross-language complexity
+**Key Decision**: Decision 004 (Updated) - Electron + TypeScript stack enables Linux support and leverages PO's HTML/CSS familiarity
+
+**Trade-offs**:
+- Larger bundle size (~150MB) vs native apps
+- Higher memory footprint
+- Benefits: Linux support, huge ecosystem, fast iteration
 
 ---
 
@@ -1481,18 +1486,19 @@ MVP is considered successful when:
 
 ```
 ┌──────────────────────────────────────────────────┐
-│         .NET MAUI Desktop App (C#)               │
+│         Electron Desktop App (TypeScript)        │
 │                                                  │
 │  ┌────────────────────────────────────────────┐ │
-│  │  UI Layer (XAML or Blazor Hybrid)          │ │
+│  │  Renderer Process (UI Layer)               │ │
+│  │  - React/Vue/Svelte (TBD)                  │ │
 │  │  - Chat interface (Decision 005)           │ │
 │  │  - Character sheet panel                   │ │
 │  │  - Scene context panel                     │ │
 │  └────────────┬───────────────────────────────┘ │
-│               ↓                                  │
+│               ↓ IPC                              │
 │  ┌────────────────────────────────────────────┐ │
-│  │  Game Engine (C# Services)                 │ │
-│  │  - Microsoft Agent Framework               │ │
+│  │  Main Process (Node.js Services)           │ │
+│  │  - Vercel AI SDK                           │ │
 │  │  - GM Agent (main)                         │ │
 │  │  - Combat Agent (Fate-specific)            │ │
 │  │  - State management                        │ │
@@ -1503,10 +1509,9 @@ MVP is considered successful when:
 │               ↓                                  │
 │  ┌────────────────────────────────────────────┐ │
 │  │  Storage Layer                             │ │
-│  │  - SQLite via EF Core                      │ │
-│  │  - Semantic Kernel Memory                  │ │
-│  │  - Vector store (Qdrant embedded/server)   │ │
-│  │  - Local campaign files                    │ │
+│  │  - SQLite via better-sqlite3               │ │
+│  │  - LanceDB / Qdrant (embedded)             │ │
+│  │  - Local campaign files (markdown)         │ │
 │  └────────────────────────────────────────────┘ │
 └───────────────┬──────────────────────────────────┘
                 ↓ HTTPS (OpenAI-compatible API)
@@ -1785,7 +1790,7 @@ The following features are explicitly **not included in MVP** but may be conside
   - Phase 3: Add additional oracles (Adventure Crafter, etc.)
 
 ### 8.3 Mobile Native Optimization
-- **Status**: .NET MAUI supports mobile, but desktop-first for MVP
+- **Status**: Electron supports mobile via Capacitor/Cordova, but desktop-first for MVP
 - **Rationale**: Desktop has larger screen, better for reading/typing. Validate concept on desktop, optimize for mobile later.
 - **Future Phase**: Post-MVP mobile optimization (iOS, Android)
 - **Considerations**: Mobile requires: collapsible panels, touch-optimized controls, potentially voice input for convenience
@@ -1878,11 +1883,11 @@ The following features are explicitly **not included in MVP** but may be conside
 #### Q3: Rule Knowledge Representation - Implementation Approach
 **Question**: How does AI access Fate Accelerated rules? Code-based tools? RAG retrieval? Both?
 
-**Decision Made** (Decision 011): Rules as AI agent knowledge, not compiled C# code
+**Decision Made** (Decision 011): Rules as AI agent knowledge, not compiled code
 - **Rules Encoding**: Markdown documents with human-readable rules text
 - **Character State**: JSON or markdown (not database entities)
 - **AI Interpretation**: AI agent "knows" rules via system prompt + RAG
-- **C# Code Limited To**: Dice rolling utilities, file I/O, UI, orchestration
+- **TypeScript Code Limited To**: Dice rolling utilities, file I/O, UI, orchestration
 - **Rationale**: More flexible, easier to add new systems, no recompilation needed
 
 **Example**:
@@ -2113,7 +2118,7 @@ public class MechanicsTracker
 - **Description**: After 50+ sessions, AI loses track of plot threads, forgets NPCs
 - **Likelihood**: MEDIUM
 - **Impact**: HIGH (campaigns become unplayable)
-- **Mitigation**: Hierarchical memory (working + session + archival via Semantic Kernel), user-curated pins, importance scoring
+- **Mitigation**: Hierarchical memory (working + session + archival via vector store), user-curated pins, importance scoring
 - **Validation**: Technical spike - simulate 50+ session campaign with memory system
 - **Status**: OPEN - Spike needed in Phase 5
 
@@ -2123,7 +2128,7 @@ public class MechanicsTracker
 - **Description**: AI applies Fate rules differently in different sessions
 - **Likelihood**: MEDIUM
 - **Impact**: HIGH (breaks game feel, user trust)
-- **Mitigation**: Encode mechanics as C# code (not AI interpretation), RAG for context, extensive unit tests, version lock rules per campaign
+- **Mitigation**: Encode mechanics as TypeScript utilities (not AI interpretation), RAG for context, extensive unit tests, version lock rules per campaign
 - **Validation**: Extensive testing with Fate rules, validation across multiple sessions
 - **Status**: OPEN - Testing in development
 
@@ -2165,14 +2170,14 @@ The following decisions from the Decisions Log inform this PRD:
 - **Decision 001**: Deployment Architecture - Local app with cloud LLM (BYOK model)
 - **Decision 002**: Internet Requirement - Internet required for MVP, offline possible with local models
 - **Decision 003**: MVP Rule System - Fate Accelerated + Mythic GME
-- **Decision 004**: Technology Stack - .NET MAUI + C# with Microsoft Agent Framework
+- **Decision 004**: Technology Stack - Electron + TypeScript with Vercel AI SDK
 - **Decision 005**: Interaction Model - Chat-first conversational interface (no quick-action buttons)
 - **Decision 006**: Dice Rolling UX - GM explains and requests rolls conversationally, with optional click-to-roll icon
 - **Decision 007**: Combat/Conflict Agent - Separate AI agent for combat resolution
 - **Decision 008**: GM Personality Configuration - User-selectable GM personality presets
 - **Decision 009**: Session State Model - Two-tier: Chat Session (in-progress) → Session Log (summary at end)
 - **Decision 010**: Hybrid Storage Architecture - Player-visible content as markdown files (like Obsidian vault), SQLite for search/indexing, vector store for semantic search
-- **Decision 011**: Rules as AI Agent Knowledge - Rules stored as markdown documents, character state as JSON/markdown, AI interprets rules conversationally, C# code limited to dice/file I/O/UI/orchestration
+- **Decision 011**: Rules as AI Agent Knowledge - Rules stored as markdown documents, character state as JSON/markdown, AI interprets rules conversationally, TypeScript code limited to dice/file I/O/UI/orchestration
 - **Decision 012**: Save After Every Message - Current chat session saves after each message, no auto-save timer, simpler crash recovery
 - **Decision 013**: Graph RAG Exploration Spike - Evaluate graph RAG for world knowledge relationship queries
 - **Decision 014**: Modular Architecture from Day One - Build pluggable rules/oracle systems even though MVP has only Fate + Mythic GME
