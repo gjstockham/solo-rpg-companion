@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(dotnet:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(pkill:*)",
+      "Bash(ls:*)",
+      "WebSearch",
+      "WebFetch",
+      "Skill(dotnet-maui)",
+      "Skill(microsoft-agent-framework)",
+      "Skill(prompt-engineering)",
+      "mcp__mslearn",
+      "mcp__context7"
+    ],
+    "ask": [
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./config/credentials.json)",
+      "Bash(git push:*)",
+      "Bash(curl:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "mslearn",
+    "context7"
+  ],
+  "alwaysThinkingEnabled": false
+}
