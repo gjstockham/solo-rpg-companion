@@ -1,26 +1,14 @@
 {
 	"name": "Electron Dev",
-	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
 	"features": {
-		"ghcr.io/devcontainers/features/node:1": {
-			"nodeGypDependencies": true,
-			"installYarnUsingApt": true,
-			"version": "lts",
-			"pnpmVersion": "latest",
-			"nvmVersion": "latest"
-		},
 		"ghcr.io/devcontainers/features/python:1": {
 			"installTools": true,
 			"version": "latest"
-		},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {
-			"moby": true,
-			"azureDnsAutoDetection": true,
-			"installDockerBuildx": true,
-			"installDockerComposeSwitch": true,
-			"version": "latest",
-			"dockerDashComposeVersion": "v2"
 		}
+
 	},
   "customizations": {
     "vscode": {
@@ -49,5 +37,10 @@
   },
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "bash ./.devcontainer/postCreateCommand.sh"
+  "postCreateCommand": "nvs use; npm ci",
+  "postStartCommand": "Xvfb :99 -screen 0 1920x1080x24 > /dev/null 2>&1 &",
+  "remoteUser": "node",
+  "remoteEnv": {
+    "DISPLAY": ":99"
+  }
 }

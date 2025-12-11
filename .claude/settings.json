@@ -9,6 +9,7 @@
       "Bash(mkdir:*)",
       "Bash(pkill:*)",
       "Bash(ls:*)",
+      "Bash(DISPLAY=:99 npx electron:*)",
       "WebSearch",
       "WebFetch",
       "Skill(electron-skill)",

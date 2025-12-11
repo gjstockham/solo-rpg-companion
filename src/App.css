@@ -1,0 +1,40 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+.app-header {
+  padding: 2rem;
+  text-align: center;
+  background-color: #2a2a2a;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.app-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #4a9eff;
+}
+
+.app-header p {
+  margin: 0;
+  color: #b0b0b0;
+}
+
+.app-main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.platform-info {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #808080;
+  font-style: italic;
+}
